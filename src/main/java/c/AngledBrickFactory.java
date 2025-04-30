@@ -45,7 +45,7 @@ public class AngleBrickFactory {
         Geometry3D inSideCornerBrick = csg.difference3D(insideCorner, holes, hole);
 
         inSideCornerBrick = csg.rotate3DX(csg.degrees(90)).transform(inSideCornerBrick);
-        inSideCornerBrick = csg.translate3DY(12).transform(inSideCornerBrick);
+        inSideCornerBrick = csg.translate3DY(cs.getUnit()).transform(inSideCornerBrick);
 
         return inSideCornerBrick;
     }
@@ -58,7 +58,7 @@ public class AngleBrickFactory {
         Geometry3D outSideCornerBrick = csg.difference3D(outSideCorner, hole);
 
         outSideCornerBrick = csg.rotate3DX(csg.degrees(90)).transform(outSideCornerBrick);
-        outSideCornerBrick = csg.translate3DY(12).transform(outSideCornerBrick);
+        outSideCornerBrick = csg.translate3DY(cs.getUnit()).transform(outSideCornerBrick);
 
         return outSideCornerBrick;
     }
