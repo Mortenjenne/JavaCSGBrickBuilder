@@ -14,14 +14,13 @@ public class Main {
         ClickSystem cs = ClickSystemFactory.system_12_8_6_medium(csg);
         BrickFactory factory = new BrickFactoryImpl(cs);
         Geometry3D brick = factory.createRectangleBrick(4,2,2,true);
+        AngleBrickFactory angle = new AngleBrickFactory(cs);
 
+        Geometry3D roof = factory.createAngleBrick(4, 2);
+        Geometry3D cornerBrick = factory.createCornerBrick(2, true);
 
-        Geometry2D triangle = csg.rightTriangle2D(24,24);
-        Geometry3D triangle3D = csg.linearExtrude(48,false,triangle);
-        triangle3D = csg.rotate3DX(csg.degrees(90)).transform(triangle3D);
-        triangle3D = csg.translate3DY(48).transform(triangle3D);
-
-        csg.view(triangle3D);
+        csg.view(cornerBrick);
+        //csg.view(roof);
 
     }
 }
