@@ -8,6 +8,10 @@ public interface BrickFactory {
     public Geometry3D createAngleBrick(int length, int height);
 
     public Geometry3D createCornerBrick(int height, boolean isInsideCorner);
+
+    public Geometry3D createCurvedBrick(int length,int width);
+
+    public Geometry3D createCurvedCornerBrick(boolean isInsideCorner);
 }
 
 

@@ -9,12 +9,15 @@ public class BrickFactoryImpl implements BrickFactory {
     private final ClickSystem cs;
     private final RectangleBrickFactory rectangleBrickFactory;
     private final AngleBrickFactory angleBrickFactory;
+    private final CurvedBrickFactory curvedBrickFactory;
 
     public BrickFactoryImpl(ClickSystem cs) {
         this.csg = cs.getJavaCSG();
         this.cs = cs;
         this.rectangleBrickFactory = new RectangleBrickFactory(cs);
         this.angleBrickFactory = new AngleBrickFactory(cs);
+        this.curvedBrickFactory = new CurvedBrickFactory(cs);
+
     }
 
     @Override
@@ -29,6 +32,14 @@ public class BrickFactoryImpl implements BrickFactory {
 
     @Override
     public Geometry3D createCornerBrick(int height, boolean isInside) {
-        return angleBrickFactory.createCornerBrick(height, isInside);
+        return angleBrickFactory.createAngleCornerBrick(height, isInside);
+    }
+
+    public Geometry3D createCurvedBrick(int length,int width){
+        return this.curvedBrickFactory.createCurvedBrick(length,width);
+    }
+
+    public Geometry3D createCurvedCornerBrick(boolean isInsideCorner){
+        return this.curvedBrickFactory.createCurvedCornerBrick(isInsideCorner);
     }
 }
