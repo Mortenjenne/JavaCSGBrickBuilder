@@ -16,6 +16,8 @@ public interface BrickFactory {
     public Geometry3D createSupportT();
 
     public Geometry3D createSupportL();
+
+    public Geometry3D createBrick(double xSize, double ySize, double zSize);
 }
 
 

@@ -4,84 +4,114 @@ import org.abstractica.clicksystem.ClickSystem;
 import org.abstractica.javacsg.Geometry3D;
 import org.abstractica.javacsg.JavaCSG;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DoorFactory {
     private final JavaCSG csg;
     private final ClickSystem cs;
+    private final double unit;
 
     public DoorFactory(ClickSystem cs) {
-        this.cs = cs;
         this.csg = cs.getJavaCSG();
+        this.cs = cs;
+        this.unit = cs.getUnit();
     }
 
-    public void createRectangle(int width, int depth) {
+    public Geometry3D createDoor (int height, int width, boolean isRightSided){
+        if(isRightSided){
+            return createRightSidedDoor(height, width);
+        } else {
+            return createLeftSidedDoor(height, width);
+        }
+    }
+
+    private Geometry3D createRightSidedDoor(int height, int width){
+        Geometry3D doorpost = createDoorPost(height, width);
+        Geometry3D hole = createHole(height);
+        Geometry3D doorPlate = createDoorPlate(height, width);
+        Geometry3D window = createRightSidedWindow(height, width);
+        Geometry3D doorhole = createDoorHandleHole(height, width);
+
+        Geometry3D door = csg.union3D(doorpost, doorPlate);
+        door = csg.difference3D(door,hole);
+        door = csg.difference3D(door, window);
+        door = csg.difference3D(door, doorhole);
+
+        return door;
+    }
+
+    private Geometry3D createLeftSidedDoor(int height, int width){
+        Geometry3D doorpost = createDoorPost(height, width);
+        Geometry3D hole = createHole(height);
+        Geometry3D doorPlate = createDoorPlate(height, width);
+        Geometry3D window = createLeftSidedWindow(height, width);
+        Geometry3D doorhole = createDoorHandleHole(height, width);
+
+        Geometry3D door = csg.union3D(doorpost, doorPlate);
+        door = csg.difference3D(door,hole);
+        door = csg.difference3D(door, window);
+        door = csg.difference3D(door, doorhole);
+
+        return door;
+    }
+
+    public Geometry3D createDoorHandle(){
+        Geometry3D doorpost = csg.cylinder3D(unit,unit * 0.5,256,false);
+
+        Geometry3D hole = cs.getFixedHole(unit * 0.25,false,true,1, false);
+        Geometry3D doorHandle = csg.difference3D(doorpost,hole);
+        return doorHandle;
 
     }
 
-    public Geometry3D createDoorFrame(double x, double y, double z){
-        double unit = cs.getUnit();
-        double margin = unit/2;
-
-        double width = x * unit;
-        double height = y * unit;
-        double depth = z * unit/2;
-
-
-        Geometry3D outer = csg.box3D(width, height, depth, false);
-        Geometry3D inner = csg.box3D(width-margin, height-margin*2-6, depth, false);
-
-        Geometry3D frame = csg.difference3D(outer,inner);
-        frame = csg.translate3D(width / 2, height / 2, 0).transform(frame);
-
-
-        double holeRadius = unit/10;
-        double holeHeight = height;
-
-
-        Geometry3D hole1 = csg.cylinder3D(holeRadius, holeHeight, 64,false);
-        hole1 = csg.translate3D(4, 5, -holeHeight).transform(hole1);
-        hole1 = csg.rotate3DX(csg.degrees(90)).transform(hole1);
-
-        Geometry3D hole2 = csg.cylinder3D(holeRadius, holeHeight, 64,false);
-        hole2 = csg.translate3D(width-4, 5, -holeHeight).transform(hole2);
-        hole2 = csg.rotate3DX(csg.degrees(90)).transform(hole2);
-
-
-        frame = csg.difference3D(frame, hole1,hole2);
-        Geometry3D holes = createDoorFrameHoles(width);
-        holes = csg.rotate3D(csg.degrees(-90),csg.degrees(0),csg.degrees(0)).transform(holes);
-        holes = csg.translate3DZ(unit).transform(holes);
-        frame = csg.difference3D(frame,holes);
-
-
-
-
-
-        return frame;
-
+    private Geometry3D createDoorPost(int height, int width){
+        Geometry3D cylinder = csg.cylinder3D(unit,height * unit,256,false);
+        return cylinder;
     }
 
-    private Geometry3D createHole() {
-        Geometry3D hole = cs.getTurnHole((0.5 * cs.getUnit()), false, true, 1, false);
+    private Geometry3D createDoorPlate(int height, int width){
+        double actualWidth = (width-0.5) * unit;
+        Geometry3D doorPlate = csg.box3D(actualWidth-1, 0.25 * unit, height * unit, false);
+        doorPlate = csg.translate3D(0.5*actualWidth, (0.5 * unit) - (0.125 * unit), 0).transform(doorPlate);
+
+        return doorPlate;
+    }
+
+    private Geometry3D createRightSidedWindow(int height, int width){
+        double doorHeight = height * unit;
+        double doorWidth = width * unit;
+        double windowWidth = doorWidth*0.60;
+
+        Geometry3D window = csg.box3D(windowWidth, 0.3 * unit, windowWidth, false);
+        window = csg.translate3D(doorWidth * 0.425,(0.5 * unit) - (0.125 * unit),doorHeight*0.6).transform(window);
+
+        return window;
+    }
+
+    private Geometry3D createLeftSidedWindow(int height, int width) {
+        double doorHeight = height * unit;
+        double doorWidth = width * unit;
+        double windowWidth = doorWidth * 0.60;
+
+        Geometry3D window = csg.box3D(windowWidth, 0.3 * unit, windowWidth, false);
+        window = csg.translate3D(doorWidth * 0.425, (0.5 * unit) - (0.125 * unit), doorHeight * 0.1).transform(window);
+
+        return window;
+    }
+
+    private Geometry3D createHole(double height) {
+        Geometry3D hole = cs.getTurnHole(unit*0.5, true, true, (int)((unit*height)*2), false);
         return hole;
     }
 
-    private Geometry3D createDoorFrameHoles(double length) {
-        Geometry3D hole = createHole();
-        List<Geometry3D> holes = new ArrayList<>();
+    private Geometry3D createDoorHandleHole(int height, int width){
+        double doorHeight = height * unit;
+        double doorWidth = width * unit;
 
-        double unit = cs.getUnit();
-        double spacing = unit;
+        Geometry3D hole = cs.getFixedHole(unit * 0.25,true,false,1, false);
 
-        for (double x = 0.5 * unit*2; x < length; x += spacing) {
-            double y = 0.5 * unit;
-            holes.add(csg.translate3D(x, y, 0).transform(hole));
-        }
+        hole = csg.rotate3DX(csg.degrees(90)).transform(hole);
+        hole = csg.translate3D(doorWidth*0.675, (0.5 * unit), (doorHeight*0.6) - unit).transform(hole);
 
-        return csg.union3D(holes);
+        return hole;
     }
-
 
 }

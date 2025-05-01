@@ -54,4 +54,9 @@ public class BrickFactoryImpl implements BrickFactory {
     public Geometry3D createSupportL() {
         return this.roofSupportFactory.createSupportL();
     }
+
+    @Override
+    public Geometry3D createBrick(double xSize, double ySize, double zSize) {
+        return this.roofSupportFactory.createBrick(xSize,ySize,zSize);
+    }
 }

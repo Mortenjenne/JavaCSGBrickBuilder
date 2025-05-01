@@ -39,6 +39,11 @@ public class RoofSupportFactory  {
         return res;
     }
 
+    public Geometry3D createBrick(double xSize, double ySize, double zSize){
+        Geometry3D brick = getRectangleBrick(xSize, ySize , zSize);
+        return brick;
+    }
+
 
     public Geometry3D getRectangleBrick(double xSize, double ySize, double zSize)
     {
