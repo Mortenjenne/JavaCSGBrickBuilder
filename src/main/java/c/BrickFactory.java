@@ -18,6 +18,12 @@ public interface BrickFactory {
     public Geometry3D createSupportL();
 
     public Geometry3D createBrick(double xSize, double ySize, double zSize);
+
+    public Geometry3D createDoor (int height, int width, boolean isRightSided);
+
+    public Geometry3D createDoorHandle();
+
+    public Geometry3D createFrame(double x, double y, double z);
 }
 
 

@@ -12,9 +12,7 @@ public class Main {
 
         ClickSystem cs = ClickSystemFactory.system_12_8_6_medium(csg);
         BrickFactory factory = new BrickFactoryImpl(cs);
-
         FrameFactory frameFactory = new FrameFactory(cs);
-
         DoorFactory doorFactory = new DoorFactory(cs);
 
         //Differrent bricks
@@ -25,16 +23,15 @@ public class Main {
         Geometry3D curvedCornerBrick = factory.createCurvedCornerBrick(false);
         Geometry3D tSupport = factory.createSupportT();
         Geometry3D lSupport = factory.createSupportL();
-        Geometry3D doorFrame = frameFactory.createFrame(4,8,1);
-        Geometry3D window = frameFactory.createFrame(4,4,1);
-        Geometry3D doorRight = doorFactory.createDoor(8,4, true);
-        Geometry3D doorLeft = doorFactory.createDoor(8,4,false);
-
-        Geometry3D doorHandle = doorFactory.createDoorHandle();
+        Geometry3D doorFrame = factory.createFrame(4,8,1);
+        Geometry3D window = factory.createFrame(4,4,1);
+        Geometry3D doorRight = factory.createDoor(8,4, true);
+        Geometry3D doorLeft = factory.createDoor(8,4,false);
+        Geometry3D doorHandle = factory.createDoorHandle();
         Geometry3D wall = factory.createBrick(1,6,1);
         
         // View
-        csg.view(wall);
+        csg.view(window);
 
     }
 }

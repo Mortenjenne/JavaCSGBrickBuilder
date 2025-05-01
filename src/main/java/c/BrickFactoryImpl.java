@@ -11,6 +11,8 @@ public class BrickFactoryImpl implements BrickFactory {
     private final AngledBrickFactory angleBrickFactory;
     private final CurvedBrickFactory curvedBrickFactory;
     private final RoofSupportFactory roofSupportFactory;
+    private final DoorFactory doorFactory;
+    private final FrameFactory frameFactory;
 
     public BrickFactoryImpl(ClickSystem cs) {
         this.csg = cs.getJavaCSG();
@@ -19,6 +21,8 @@ public class BrickFactoryImpl implements BrickFactory {
         this.angleBrickFactory = new AngledBrickFactory(cs);
         this.curvedBrickFactory = new CurvedBrickFactory(cs);
         this.roofSupportFactory = new RoofSupportFactory(cs);
+        this.doorFactory = new DoorFactory(cs);
+        this.frameFactory = new FrameFactory(cs);
 
     }
 
@@ -58,5 +62,20 @@ public class BrickFactoryImpl implements BrickFactory {
     @Override
     public Geometry3D createBrick(double xSize, double ySize, double zSize) {
         return this.roofSupportFactory.createBrick(xSize,ySize,zSize);
+    }
+
+    @Override
+    public Geometry3D createDoor(int height, int width, boolean isRightSided) {
+        return this.doorFactory.createDoor(height,width,isRightSided);
+    }
+
+    @Override
+    public Geometry3D createDoorHandle() {
+        return this.doorFactory.createDoorHandle();
+    }
+
+    @Override
+    public Geometry3D createFrame(double x, double y, double z) {
+        return this.frameFactory.createFrame(x,y,z);
     }
 }

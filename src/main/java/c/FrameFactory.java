@@ -20,12 +20,9 @@ public class FrameFactory {
     public Geometry3D createFrame(double x, double y, double z){
         double unit = cs.getUnit();
         double margin = unit/2;
-
-
         double width = x * unit;
         double height = y * unit;
         double depth = z * unit;
-
 
         Geometry3D outer = csg.box3D(width, height, depth, false);
         Geometry3D inner = csg.box3D(width-margin, height-margin*2-6, depth * 0.3, false);
