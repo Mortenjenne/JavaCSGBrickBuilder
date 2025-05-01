@@ -8,15 +8,17 @@ public class BrickFactoryImpl implements BrickFactory {
     private final JavaCSG csg;
     private final ClickSystem cs;
     private final RectangleBrickFactory rectangleBrickFactory;
-    private final AngleBrickFactory angleBrickFactory;
+    private final AngledBrickFactory angleBrickFactory;
     private final CurvedBrickFactory curvedBrickFactory;
+    private final RoofSupportFactory roofSupportFactory;
 
     public BrickFactoryImpl(ClickSystem cs) {
         this.csg = cs.getJavaCSG();
         this.cs = cs;
         this.rectangleBrickFactory = new RectangleBrickFactory(cs);
-        this.angleBrickFactory = new AngleBrickFactory(cs);
+        this.angleBrickFactory = new AngledBrickFactory(cs);
         this.curvedBrickFactory = new CurvedBrickFactory(cs);
+        this.roofSupportFactory = new RoofSupportFactory(cs);
 
     }
 
@@ -26,13 +28,13 @@ public class BrickFactoryImpl implements BrickFactory {
     }
 
     @Override
-    public Geometry3D createAngleBrick(int length, int height) {
-        return angleBrickFactory.createAngleBrick(length, height);
+    public Geometry3D createAngledBrick(int length, int height) {
+        return angleBrickFactory.createAngledBrick(length, height);
     }
 
     @Override
-    public Geometry3D createCornerBrick(int height, boolean isInside) {
-        return angleBrickFactory.createAngleCornerBrick(height, isInside);
+    public Geometry3D createAngledCornerBrick(int height, boolean isInside) {
+        return angleBrickFactory.createAngledCornerBrick(height, isInside);
     }
 
     public Geometry3D createCurvedBrick(int length,int width){
@@ -41,5 +43,15 @@ public class BrickFactoryImpl implements BrickFactory {
 
     public Geometry3D createCurvedCornerBrick(boolean isInsideCorner){
         return this.curvedBrickFactory.createCurvedCornerBrick(isInsideCorner);
+    }
+
+    @Override
+    public Geometry3D createSupportT() {
+        return this.roofSupportFactory.createSupportT();
+    }
+
+    @Override
+    public Geometry3D createSupportL() {
+        return this.roofSupportFactory.createSupportL();
     }
 }

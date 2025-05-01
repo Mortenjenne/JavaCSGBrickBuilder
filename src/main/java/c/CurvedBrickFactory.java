@@ -30,7 +30,7 @@ public class CurvedBrickFactory {
 
 
     private Geometry3D createHole(){
-            Geometry3D hole = cs.getTurnHole(6,false,true,1,false);
+            Geometry3D hole = cs.getTurnHole((0.5 * cs.getUnit()),false,true,1,false);
             return hole;
     }
 
@@ -56,15 +56,15 @@ public class CurvedBrickFactory {
 
     public Geometry3D createCurvedCornerBrick(boolean isInsideCorner){
         if(isInsideCorner){
-            return  createInsideCurvedBrick();
+            return  createCurvedInsideBrick();
         }
         else {
-            return createOutsideCurvedBrick();
+            return createCurvedOutsideBrick();
         }
     }
 
-    private Geometry3D createInsideCurvedBrick() {
-        Geometry3D insideCorner = createInsideCorner();
+    private Geometry3D createCurvedInsideBrick() {
+        Geometry3D insideCorner = createInsideCurvedCorner();
         Geometry3D holes = createHoles(2);
         Geometry3D hole = createHole();
         hole = csg.translate3D((1.5 * cs.getUnit()),(0.5 * cs.getUnit()),0).transform(hole);
@@ -76,8 +76,8 @@ public class CurvedBrickFactory {
         return inSideCornerBrick;
     }
 
-    private Geometry3D createOutsideCurvedBrick() {
-        Geometry3D outSideCorner = createOutsideCorner();
+    private Geometry3D createCurvedOutsideBrick() {
+        Geometry3D outSideCorner = createOutsideCurvedCorner();
         Geometry3D hole = createHole();
         hole = csg.translate3D((0.5 * cs.getUnit()),(0.5 * cs.getUnit()),0).transform(hole);
         Geometry3D outSideCornerBrick = csg.difference3D(outSideCorner,hole);
@@ -88,22 +88,21 @@ public class CurvedBrickFactory {
         return outSideCornerBrick;
     }
 
-    private Geometry3D createInsideCorner(){
+    private Geometry3D createInsideCurvedCorner(){
         Geometry3D quarterCircle1 = createQuarterCircle(2, 2);
         Geometry3D quarterCircle2 = createQuarterCircle(2, 2);
         quarterCircle2 = csg.rotate3DZ(csg.degrees(90)).transform(quarterCircle2);
-        quarterCircle2 = csg.translate3D((2*cs.getUnit()),0,0).transform(quarterCircle2);
+        quarterCircle2 = csg.translate3DX((2*cs.getUnit())).transform(quarterCircle2);
         Geometry3D curvedInsideCornerBrick = csg.union3D(quarterCircle1,quarterCircle2);
 
-        // return triangle1;
         return curvedInsideCornerBrick;
     }
 
-    private Geometry3D createOutsideCorner(){
+    private Geometry3D createOutsideCurvedCorner(){
         Geometry3D quarterCircle1 = createQuarterCircle(2,2);
         Geometry3D quarterCircle2 = createQuarterCircle(2,2);
         quarterCircle2 = csg.rotate3DZ(csg.degrees(90)).transform(quarterCircle2);
-        quarterCircle2 = csg.translate3D(24,0,0).transform(quarterCircle2);
+        quarterCircle2 = csg.translate3DX((2*cs.getUnit())).transform(quarterCircle2);
         Geometry3D curvedOutsideCornerBrick = csg.intersection3D(quarterCircle1,quarterCircle2);
 
         return curvedOutsideCornerBrick;

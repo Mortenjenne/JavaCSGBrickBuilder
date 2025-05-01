@@ -46,7 +46,7 @@ public class RectangleBrickFactory {
     }
 
     private Geometry3D createHole(int zSize){
-        Geometry3D hole = cs.getTurnHole(6,true,true,zSize,false);
+        Geometry3D hole = cs.getTurnHole((2*cs.getUnit()),true,true,zSize,false);
         return hole;
     }
 
@@ -62,5 +62,43 @@ public class RectangleBrickFactory {
         return csg.union3D(holes);
     }
 
+
+/*
+
+
+
+ public Geometry3D getRectangleBrick(double xSize, double ySize, double zSize)
+    {
+        if (    xSize < 1 || xSize != Math.floor(xSize) ||
+                ySize < 1 || ySize != Math.floor(ySize) ||
+                (zSize*2 < 1 || zSize*2 != Math.floor(zSize*2)))
+        {
+            throw new IllegalArgumentException("Invalid brick size");
+        }
+        double unit = cs.getUnit();
+        Geometry3D hole = cs.getTurnHole(0.5*unit, true, true, (int) (zSize*2), false);
+        Geometry3D printGeometry = generateBrick(xSize, ySize, zSize, hole);
+        return printGeometry;
+    }
+
+
+    private Geometry3D generateBrick(double xSize, double ySize, double zSize, Geometry3D hole)
+    {
+        double unit = cs.getUnit();
+        Geometry3D brick = csg.box3D(unit*xSize, unit*ySize, unit*zSize, false);
+        brick = csg.translate3D(0.5*unit*xSize, 0.5*unit*ySize, 0).transform(brick);
+        List<Geometry3D> holes = new ArrayList<>();
+        for(int y = 0; y < ySize; ++y)
+        {
+            for(int x = 0; x < xSize; ++x)
+            {
+                Geometry3D holeCopy = csg.translate3D((x+0.5)*unit, (y+0.5)*unit, 0).transform(hole);
+                holes.add(holeCopy);
+            }
+        }
+        brick = csg.difference3D(brick, holes);
+        return brick;
+    }
+ */
 
 }

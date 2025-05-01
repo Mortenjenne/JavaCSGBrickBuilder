@@ -8,18 +8,18 @@ import org.abstractica.javacsg.JavaCSG;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AngleBrickFactory {
+public class AngledBrickFactory {
 
     private final JavaCSG csg;
     private final ClickSystem cs;
 
 
-    public AngleBrickFactory(ClickSystem cs) {
+    public AngledBrickFactory(ClickSystem cs) {
         this.csg = cs.getJavaCSG();
         this.cs = cs;
     }
 
-    public Geometry3D createAngleBrick(int length, int height) {
+    public Geometry3D createAngledBrick(int length, int height) {
         Geometry3D triangle = createTriangle(length, height);
         Geometry3D holes = createHoles(length);
         Geometry3D res = csg.difference3D(triangle, holes);
@@ -29,7 +29,7 @@ public class AngleBrickFactory {
     }
 
 
-    public Geometry3D createAngleCornerBrick(int height, boolean isInsideCorner) {
+    public Geometry3D createAngledCornerBrick(int height, boolean isInsideCorner) {
         if (isInsideCorner) {
             return createInsideCornerBrick(height);
         } else {
@@ -69,7 +69,7 @@ public class AngleBrickFactory {
         Geometry3D triangle2 = createTriangle(2, height);
 
         triangle2 = csg.rotate3DZ(csg.degrees(90)).transform(triangle2);
-        triangle2 = csg.translate3D((2 * cs.getUnit()), 0, 0).transform(triangle2);
+        triangle2 = csg.translate3DX((2 * cs.getUnit())).transform(triangle2);
         Geometry3D cornerBrick = csg.union3D(triangle1, triangle2);
 
         return cornerBrick;
@@ -80,7 +80,7 @@ public class AngleBrickFactory {
         Geometry3D triangle1 = createTriangle(2, height);
         Geometry3D triangle2 = createTriangle(2, height);
         triangle2 = csg.rotate3DZ(csg.degrees(90)).transform(triangle2);
-        triangle2 = csg.translate3D((2 * cs.getUnit()), 0, 0).transform(triangle2);
+        triangle2 = csg.translate3DX((2 * cs.getUnit())).transform(triangle2);
         Geometry3D cornerBrick = csg.intersection3D(triangle1, triangle2);
 
         return cornerBrick;
@@ -97,7 +97,7 @@ public class AngleBrickFactory {
     }
 
     private Geometry3D createHole() {
-        Geometry3D hole = cs.getTurnHole(6, false, true, 1, false);
+        Geometry3D hole = cs.getTurnHole((0.5 * cs.getUnit()), false, true, 1, false);
         return hole;
     }
 

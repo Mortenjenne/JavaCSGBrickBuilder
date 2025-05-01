@@ -5,13 +5,17 @@ import org.abstractica.javacsg.Geometry3D;
 public interface BrickFactory {
     public Geometry3D createRectangleBrick(int xSize, int ySize, int zSize, boolean roundCorners);
 
-    public Geometry3D createAngleBrick(int length, int height);
+    public Geometry3D createAngledBrick(int length, int height);
 
-    public Geometry3D createCornerBrick(int height, boolean isInsideCorner);
+    public Geometry3D createAngledCornerBrick(int height, boolean isInsideCorner);
 
     public Geometry3D createCurvedBrick(int length,int width);
 
     public Geometry3D createCurvedCornerBrick(boolean isInsideCorner);
+
+    public Geometry3D createSupportT();
+
+    public Geometry3D createSupportL();
 }
 
 
